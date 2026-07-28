@@ -1,0 +1,66 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BlogApp.Data.Models
+@using BlogApp.ViewModels
+@inject SignInManager<ApplicationUser> SignInManager
+@inject UserManager<ApplicationUser> UserManager
+
+@{
+    ViewData["Title"] = "Главная";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="auth-container">
+@if (SignInManager.IsSignedIn(User))
+{
+    <div>
+        <h2>Здравствуйте, @User.Identity.Name!</h2>
+        <p>Вы вошли в систему.</p>
+    </div>
+}
+else
+{
+    <div class="row">
+            <div class="side">
+                <div class="center p-4 bg-light text-center">
+                    <h3 class="mb-4 fw-bold">Добро пожаловать в <span class="fw-bold">ВашБлог</span>!</h3>
+                    <p class="mb-3 fs-5">Присоединяйтесь к сообществу и <span class="fw-semibold">делитесь своими мыслями</span> с миром.</p>
+                    <p class="mb-0">Уже с нами? <span class="fw-semibold">Войдите и продолжайте общение!</span></p>
+                </div>
+            </div>
+
+            <div class="main">
+                <div id="auth-forms-container">
+                    <!-- Форма входа (по умолчанию) -->
+                    <div id="login-form" style="@(Model.ActiveForm == "login" ? "" : "display: none;")">
+                        <partial name="~/Views/Account/_LoginPartial.cshtml" model="Model.LoginViewModel" />
+                    </div>
+
+                    <!-- Форма регистрации -->
+                    <div id="register-form" style="@(Model.ActiveForm == "register" ? "" : "display: none;")">
+                        <partial name="~/Views/Account/_RegisterPartial.cshtml" model="Model.RegisterViewModel" />
+                    </div>
+                </div>
+            </div>
+    </div>
+}
+</div>
+
+@section Scripts {
+    <script>
+        function showRegisterForm() {
+            // Плавное исчезновение формы входа
+            $('#login-form').fadeOut(300, function() {
+                // Плавное появление формы регистрации
+                $('#register-form').fadeIn(300);
+            });
+        }
+
+        function showLoginForm() {
+            // Плавное исчезновение формы регистрации
+            $('#register-form').fadeOut(300, function() {
+                // Плавное появление формы входа
+                $('#login-form').fadeIn(300);
+            });
+        }
+    </script>
+}
